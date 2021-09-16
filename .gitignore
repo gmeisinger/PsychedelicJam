@@ -38,3 +38,6 @@ sysinfo.txt
 
 # Editor files
 .vsconfig
+
+# Log files
+*.log
