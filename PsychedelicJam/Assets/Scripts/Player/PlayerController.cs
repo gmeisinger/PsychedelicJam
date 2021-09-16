@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -9,8 +10,6 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer bodySprite, hairSprite, shirtSprite, pantsSprite, handsSprite;
     #endregion
     #region Private
-    //private SpriteRenderer bodySprite, hairSprite, pantsSprite, shirtSprite, handsSprite;
-    //private Animator bodyAnimator, hairAnimator, pantsAnimator, shirtAnimator, handsAnimator;
     private SpriteRenderer[] renderers;
     private Dictionary<string, Sprite[]> sprites;
     #endregion
@@ -38,22 +37,25 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Animation
-    // load sprites from resources
+    /// <summary>
+    /// Loads sprites from resources folder into a dictionary, keyed by the base name of the sprite.
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<string, Sprite[]> loadSprites()
     {
         Dictionary<string, Sprite[]> spritesDict = new Dictionary<string, Sprite[]>();
-        //Debug.Log(spritesDict);
         foreach (SpriteRenderer s in renderers)
         {
             string baseName = s.sprite.name.Split('_')[0];
             Sprite[] sprites = Resources.LoadAll<Sprite>("PlayerSprites/" + baseName);
             spritesDict.Add(baseName, sprites);
-            //Debug.Log(sprites.Length);
         }
         return spritesDict;
     }
 
-    // sync sprite frames
+    /// <summary>
+    /// syncs all sprites to the body sprite, allowing us to use a single animator
+    /// </summary>
     public void syncSprites()
     {
         foreach (SpriteRenderer s in renderers)
@@ -63,7 +65,6 @@ public class PlayerController : MonoBehaviour
 
             Sprite newSprite = this.sprites[baseName][index];
             s.sprite = newSprite;
-            //Debug.Log(baseName + tail);
         }
     }
     #endregion
