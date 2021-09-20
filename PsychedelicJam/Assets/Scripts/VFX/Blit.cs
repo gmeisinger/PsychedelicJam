@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// Allows for shaders to be applied to entire screen.
+/// </summary>
 public class Blit : ScriptableRendererFeature
 {
 

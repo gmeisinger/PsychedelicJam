@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles player physics and movement.
+/// </summary>
 public class PlayerMovement : MonoBehaviour
 {
     // ground check
@@ -27,16 +30,14 @@ public class PlayerMovement : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
     ParticleSystem particles;
+    AudioSource jumpSound;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         particles = groundCheck.GetComponent<ParticleSystem>();
-    }
-
-    private void Start()
-    {
+        jumpSound = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -113,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(new Vector2(0f, jumpForce));
             particles.Play();
             particleTimer = 0;
+            jumpSound.Play();
         }
         else if(!grounded && pressed == 0 && rb.velocity.y > 0)
         {

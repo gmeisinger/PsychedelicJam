@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// Syncs sprites, updates colors and animations.
+/// </summary>
 public class PlayerAnimator : MonoBehaviour
 {
     #region Public

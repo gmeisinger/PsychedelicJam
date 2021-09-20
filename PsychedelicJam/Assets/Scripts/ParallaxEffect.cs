@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Parallax scrolling effect for background layers
+/// </summary>
 public class ParallaxEffect : MonoBehaviour
 {
     private float length, startpos;
