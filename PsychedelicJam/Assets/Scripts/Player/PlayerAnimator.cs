@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerAnimator : MonoBehaviour
 {
     #region Public
     public Color bodyColor, hairColor, shirtColor, pantsColor;
@@ -23,14 +23,10 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        bodySprite.color = bodyColor;
-        handsSprite.color = bodyColor;
-        hairSprite.color = hairColor;
-        shirtSprite.color = shirtColor;
-        pantsSprite.color = pantsColor;
+        UpdateColors();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         syncSprites();
     }
@@ -66,6 +62,15 @@ public class PlayerController : MonoBehaviour
             Sprite newSprite = this.sprites[baseName][index];
             s.sprite = newSprite;
         }
+    }
+
+    public void UpdateColors()
+    {
+        bodySprite.color = bodyColor;
+        handsSprite.color = bodyColor;
+        hairSprite.color = hairColor;
+        shirtSprite.color = shirtColor;
+        pantsSprite.color = pantsColor;
     }
     #endregion
 }
