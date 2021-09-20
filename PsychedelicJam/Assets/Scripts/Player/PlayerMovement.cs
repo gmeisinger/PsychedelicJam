@@ -8,7 +8,9 @@ public class PlayerMovement : MonoBehaviour
     // ground check
     public Transform groundCheck;
     [SerializeField] private LayerMask whatIsGround;
-    const float groundedRadius = .2f;
+    const float groundedRadius = .1f;
+    const float particleBuffer = .1f;
+    private float particleTimer = 0f;
     private bool grounded;
 
     float jumpForce = 40000f;
@@ -24,11 +26,13 @@ public class PlayerMovement : MonoBehaviour
     // need an animator reference to set parameters
     Animator animator;
     Rigidbody2D rb;
+    ParticleSystem particles;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        particles = groundCheck.GetComponent<ParticleSystem>();
     }
 
     private void Start()
@@ -38,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         Move(direction);
+        particleTimer += Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -55,6 +60,13 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // this is just a hack to prevent the player from slowing down when landing
                     rb.velocity = new Vector2(direction * speed, 0);
+                    // dust cloud
+                    if(particleTimer > particleBuffer)
+                    {
+                        particles.Play();
+                        particleTimer = 0;
+                    }
+                    
                 }
             }
         }
@@ -99,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
         {
             grounded = false;
             rb.AddForce(new Vector2(0f, jumpForce));
+            particles.Play();
+            particleTimer = 0;
         }
         else if(!grounded && pressed == 0 && rb.velocity.y > 0)
         {
