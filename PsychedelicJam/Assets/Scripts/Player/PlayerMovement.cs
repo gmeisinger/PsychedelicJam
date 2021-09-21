@@ -124,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(new Vector2(0f, jumpForce));
             particles.Play();
             particleTimer = 0;
-            jumpSound.Play();
+            //jumpSound.Play();
         }
         else if(!grounded && pressed == 0 && rb.velocity.y > 0)
         {
