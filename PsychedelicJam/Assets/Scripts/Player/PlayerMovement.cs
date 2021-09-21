@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -32,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
     ParticleSystem particles;
     AudioSource jumpSound;
 
+    // death event
+    public UnityEvent onDeath;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -44,6 +48,12 @@ public class PlayerMovement : MonoBehaviour
     {
         Move(direction);
         particleTimer += Time.deltaTime;
+
+        // death check
+        if(transform.position.y < -200)
+        {
+            onDeath.Invoke();
+        }
     }
 
     private void FixedUpdate()

@@ -34,6 +34,7 @@ public class TripManager : MonoBehaviour
     [HideInInspector] public int score = 0;
     [SerializeField] ForwardRendererData rendererData;
     public ScoreKeeper scoreKeeper;
+    public AudioSource music;
 
     private float decay = .02f;
     private Dictionary<string, Blit> effects = new Dictionary<string, Blit>();
@@ -57,11 +58,21 @@ public class TripManager : MonoBehaviour
         effects["Color"].settings.intensity = tripFactor * .5f;
 
         rendererData.SetDirty();
+
+        // update the music
+        UpdateMusic();
     }
 
     public void UpdateScore()
     {
+        if (scoreKeeper == null) return;
         scoreKeeper.SetScore(score);
+    }
+
+    private void UpdateMusic()
+    {
+        if (music == null) return;
+        music.pitch = 1 + tripFactor * .5f;
     }
 
     public void UpdateScore(int add)
