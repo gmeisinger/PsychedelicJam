@@ -42,9 +42,7 @@ public class Blit : ScriptableRendererFeature
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-        {
-            Debug.Log(blitMaterial.shader.GetPropertyCount());
-            
+        {            
             CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag);
 
             RenderTextureDescriptor opaqueDesc = renderingData.cameraData.cameraTargetDescriptor;

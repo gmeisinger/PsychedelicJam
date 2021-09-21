@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using System.Reflection;
+using UnityEngine.Events;
 
 /// <summary>
 /// Singleton that tracks and decays trippiness. Can be referenced anywhere
@@ -30,8 +31,9 @@ public class TripManager : MonoBehaviour
     #endregion
 
     public float tripFactor = 0;
-
+    [HideInInspector] public int score = 0;
     [SerializeField] ForwardRendererData rendererData;
+    public ScoreKeeper scoreKeeper;
 
     private float decay = .02f;
     private Dictionary<string, Blit> effects = new Dictionary<string, Blit>();
@@ -55,5 +57,16 @@ public class TripManager : MonoBehaviour
         effects["Color"].settings.intensity = tripFactor * .5f;
 
         rendererData.SetDirty();
+    }
+
+    public void UpdateScore()
+    {
+        scoreKeeper.SetScore(score);
+    }
+
+    public void UpdateScore(int add)
+    {
+        score += (int)(add * (1 + tripFactor * 2));
+        UpdateScore();
     }
 }

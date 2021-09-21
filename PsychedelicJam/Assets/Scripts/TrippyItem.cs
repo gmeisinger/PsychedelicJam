@@ -11,7 +11,9 @@ public class TrippyItem : MonoBehaviour
     public float floatFactor = 3f;
     public float floatSpeed = 3f;
     private float startHeight;
-    
+    public int score = 100;
+
+
     private void Awake()
     {
         startHeight = transform.position.y;
@@ -20,6 +22,8 @@ public class TrippyItem : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log(collision.name);
+        
+        TripManager.Instance.UpdateScore(score);
         TripManager.Instance.tripFactor += tripFactor;
         gameObject.SetActive(false);
     }
