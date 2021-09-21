@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tripFactor: 0
+  wavey: {fileID: 2100000, guid: c56f5d25b86df114e9828e17e3c97168, type: 2}
+  rendererData: {fileID: 11400000, guid: 3bd77b9253a203f469c9c30abdaef8c9, type: 2}

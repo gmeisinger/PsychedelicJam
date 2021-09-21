@@ -43,6 +43,8 @@ public class Blit : ScriptableRendererFeature
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            Debug.Log(blitMaterial.shader.GetPropertyCount());
+            
             CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag);
 
             RenderTextureDescriptor opaqueDesc = renderingData.cameraData.cameraTargetDescriptor;
@@ -75,12 +77,14 @@ public class Blit : ScriptableRendererFeature
     [System.Serializable]
     public class BlitSettings
     {
-        public RenderPassEvent Event = RenderPassEvent.AfterRenderingOpaques;
+        public RenderPassEvent Event = RenderPassEvent.BeforeRenderingPostProcessing;
 
         public Material blitMaterial = null;
         public int blitMaterialPassIndex = 0;
         public Target destination = Target.Color;
         public string textureId = "_BlitPassTexture";
+
+        [Range(0, 1)] public float intensity = 0;
     }
 
     public enum Target
@@ -98,6 +102,10 @@ public class Blit : ScriptableRendererFeature
     {
         var passIndex = settings.blitMaterial != null ? settings.blitMaterial.passCount - 1 : 1;
         settings.blitMaterialPassIndex = Mathf.Clamp(settings.blitMaterialPassIndex, -1, passIndex);
+        if (settings.blitMaterial.HasProperty("Intensity"))
+        {
+            settings.blitMaterial.SetFloat("Intensity", settings.intensity);
+        }
         blitPass = new BlitPass(settings.Event, settings.blitMaterial, settings.blitMaterialPassIndex, name);
         m_RenderTextureHandle.Init(settings.textureId);
     }
@@ -111,6 +119,10 @@ public class Blit : ScriptableRendererFeature
         {
             Debug.LogWarningFormat("Missing Blit Material. {0} blit pass will not execute. Check for missing reference in the assigned renderer.", GetType().Name);
             return;
+        }
+        else if (settings.blitMaterial.HasProperty("Intensity"))
+        {
+            blitPass.blitMaterial.SetFloat("Intensity", settings.intensity);
         }
 
         blitPass.Setup(src, dest);

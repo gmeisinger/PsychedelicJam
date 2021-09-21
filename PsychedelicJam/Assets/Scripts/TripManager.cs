@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using System.Reflection;
 
 /// <summary>
 /// Singleton that tracks and decays trippiness. Can be referenced anywhere
@@ -27,15 +31,29 @@ public class TripManager : MonoBehaviour
 
     public float tripFactor = 0;
 
-    private float decay = .01f;
+    [SerializeField] ForwardRendererData rendererData;
+
+    private float decay = .02f;
+    private Dictionary<string, Blit> effects = new Dictionary<string, Blit>();
+
+    private void Start()
+    {
+        //rendererData = GetRendererData();
+        effects = rendererData.rendererFeatures.OfType<Blit>().ToDictionary(x => x.name, x => x);
+    }
 
     private void Decay(float deltaTime)
     {
-        tripFactor = Mathf.Max(0, tripFactor - decay * deltaTime);
+        tripFactor = Mathf.Clamp(tripFactor - decay * deltaTime, 0, 1);
     }
 
     private void Update()
     {
         Decay(Time.deltaTime);
+        // update the materials
+        effects["Wave"].settings.intensity = tripFactor * .5f;
+        effects["Color"].settings.intensity = tripFactor * .5f;
+
+        rendererData.SetDirty();
     }
 }
