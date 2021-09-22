@@ -43,6 +43,7 @@ public class TripManager : MonoBehaviour
     {
         //rendererData = GetRendererData();
         effects = rendererData.rendererFeatures.OfType<Blit>().ToDictionary(x => x.name, x => x);
+        StartCoroutine(IntroWarp());
     }
 
     private void Decay(float deltaTime)
@@ -54,7 +55,7 @@ public class TripManager : MonoBehaviour
     {
         Decay(Time.deltaTime);
         // update the materials
-        effects["Wave"].settings.intensity = tripFactor * .5f;
+        effects["Wave"].settings.intensity = tripFactor * .2f;
         effects["Color"].settings.intensity = tripFactor * .5f;
 
         rendererData.SetDirty();
@@ -79,5 +80,28 @@ public class TripManager : MonoBehaviour
     {
         score += (int)(add * (1 + tripFactor * 2));
         UpdateScore();
+    }
+
+    private IEnumerator IntroWarp()
+    {
+        float duration = .5f;
+        float timer = 0;
+        float intensity = 1;
+        while(intensity > 0)
+        {
+            effects["Wave"].settings.intensity = intensity;
+            effects["Color"].settings.intensity = intensity;
+            intensity = Mathf.Lerp(1, 0, timer/duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        effects["Wave"].settings.intensity = 0;
+        effects["Color"].settings.intensity = 0;
+    }
+
+    private void OnDisable()
+    {
+        effects["Wave"].settings.intensity = 0;
+        effects["Color"].settings.intensity = 0;
     }
 }

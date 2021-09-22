@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerMovement : MonoBehaviour
 {
+    [HideInInspector] public bool inputEnabled = true;
+
     // ground check
     public Transform groundCheck;
     [SerializeField] private LayerMask whatIsGround;
@@ -46,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!inputEnabled) return;
+
         Move(direction);
         particleTimer += Time.deltaTime;
 
@@ -53,11 +57,14 @@ public class PlayerMovement : MonoBehaviour
         if(transform.position.y < -200)
         {
             onDeath.Invoke();
+            gameObject.SetActive(false);
         }
     }
 
     private void FixedUpdate()
     {
+        if (!inputEnabled) return;
+
         bool wasGrounded = grounded;
         grounded = false;
         animator.SetFloat("y_move", rb.velocity.y);
@@ -87,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
     private void Move(float move)
     {
         moving = move != 0 ? true : false;
-        Vector3 targetVelocity = new Vector2(move * speed, rb.velocity.y);
+        Vector3 targetVelocity = new Vector2(move * speed * (1 + TripManager.Instance.tripFactor), rb.velocity.y);
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, movementSmoothing);
         animator.SetBool("moving", moving);
         if (move > 0 && flipped)

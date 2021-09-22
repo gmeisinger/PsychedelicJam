@@ -5092,6 +5092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eac43ffcb47d94da414e5778d640b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputEnabled: 1
   groundCheck: {fileID: 4514251198090331520}
   whatIsGround:
     serializedVersion: 2
@@ -5142,7 +5143,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 3758098179433839385}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 35b5f5ad274495f48b205bc7b26591d6, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
